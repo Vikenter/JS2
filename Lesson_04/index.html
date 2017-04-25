@@ -2,8 +2,55 @@
 <html>
 <head>
 	<title>l4</title>
+	<meta charset="utf-8" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<link href="style.css" rel="stylesheet" />
 </head>
 <body>
+<div class="tabs">
 
+	<ul class="tab">
+		<li class="selected">Первая вкладка</li>
+		<li>Вторая вкладка</li>
+		<li>Третья вкладка</li>
+		<li>Червертая вкладка</li>
+		<li>Пятая вкладка</li>
+	</ul>
+
+	<div class="tab_content selected">
+		<p>Инфа 1 |</p>
+	</div>
+
+	<div class="tab_content">
+		<p>Инфа 2</p>
+	</div>
+
+	<div class="tab_content">
+		<p>Инфа 3</p>
+	</div>
+
+	<div class="tab_content">
+		<p>Инфа 4</p>
+	</div>
+
+	<div class="tab_content">
+		<p>Инфа 5</p>
+	</div>
+
+</div>
+
+<script>
+	(function($) {
+$(function() {
+
+	$('ul.tab').on('click', 'li:not(.selected)', function() {
+		$(this)
+			.addClass('selected').siblings().removeClass('selected')
+			.closest('div.tabs').find('div.tab_content').removeClass('selected').eq($(this).index()).addClass('selected');
+	});
+
+});
+})(jQuery);
+</script>
 </body>
 </html>
