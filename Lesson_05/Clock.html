@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Clock</title>
+</head>
+<body>
+<script>
+  var clockOn = true;
+  function clockRender() {
+    var now = new Date();
+    var sec = now.getSeconds();
+    var min = now.getMinutes();
+    var hr = now.getHours();
+
+    var ctx = document.getElementById("canvas").getContext("2d");
+    ctx.save();
+
+    function dial(scale, division, lineEnd, lineStart) {
+      for (var i = 0; i < scale; i++) {
+        ctx.beginPath();
+        ctx.rotate(Math.PI/division);
+        ctx.moveTo(lineEnd,0);
+        ctx.lineTo(lineStart,0);
+        ctx.stroke();
+      }
+    ctx.restore();
+    ctx.save();  
+    }
+
+    if (clockOn === true) {
+
+      ctx.clearRect(0,0,500,500);
+
+      ctx.beginPath();
+      ctx.arc(250, 250, 190, 0, 2*Math.PI, false);
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = '#bbb';
+      ctx.stroke();
+      ctx.save();
+
+      ctx.translate(250, 250);
+      ctx.scale(0.4,0.4);
+      ctx.rotate(-Math.PI/2);
+
+      ctx.strokeStyle = "black";
+      ctx.fillStyle = "black";
+      ctx.lineWidth = 14;
+      ctx.lineCap = "sqare";
+
+      ctx.save();
+
+      dial(60, 30, 490, 440);
+      dial(12, 6, 500, 400);
+       
+      ctx.rotate((Math.PI/6)*hr +
+        (Math.PI/360)*min +
+        (Math.PI/21600)*sec);
+      ctx.lineWidth = 40;
+
+      ctx.beginPath();
+      ctx.moveTo(-20,0);
+
+      ctx.moveTo(-80,0);
+      ctx.lineTo(320,0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+
+      ctx.rotate((Math.PI/6)*hr +
+        (Math.PI/360)*min +
+        (Math.PI/21600)*sec);
+      ctx.strokeStyle = "white";
+      ctx.fillStyle = "white";
+      ctx.lineWidth = 12;
+
+      ctx.beginPath();
+      ctx.moveTo(-20,0);
+
+      ctx.moveTo(80,0);
+      ctx.lineTo(300,0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+
+      ctx.rotate((Math.PI/30*min) +
+        (Math.PI/1800)*sec);
+      ctx.lineWidth = 24;
+
+      ctx.beginPath();
+      ctx.moveTo(-80,0);
+      ctx.lineTo(398,0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+
+      ctx.rotate(sec * Math.PI/30);
+      ctx.strokeStyle = "#D40000";
+      ctx.fillStyle = "#D40000";
+      ctx.lineWidth = 16;
+
+      ctx.beginPath();
+      ctx.lineCap = "round";
+      ctx.moveTo(-120,0);
+      ctx.lineTo(483,0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+
+      ctx.rotate(sec * Math.PI/30);
+      ctx.strokeStyle = "#D40000";
+      ctx.fillStyle = "#D40000";
+      ctx.lineWidth = 20;
+
+      ctx.beginPath();
+      ctx.lineCap = "round";
+      ctx.moveTo(390,0);
+      ctx.lineTo(462,0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.save();
+
+      ctx.rotate(sec * Math.PI/30);
+      ctx.strokeStyle = "white";
+      ctx.fillStyle = "white";
+      ctx.lineWidth = 4;
+
+      ctx.beginPath();
+      ctx.lineCap = "round";
+      ctx.moveTo(400,0);
+      ctx.lineTo(472,0);
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.restore();
+
+      ctx.beginPath();
+      ctx.arc(250, 250, 8, 0, 2*Math.PI, false);
+      ctx.fillStyle = '#D40000';
+      ctx.fill();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#D40000';
+      ctx.stroke();
+
+
+      ctx.beginPath();
+      ctx.arc(250, 250, 2, 0, 2*Math.PI, false);
+      ctx.fillStyle = '#000';
+      ctx.fill();
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = '#000';
+      ctx.stroke();
+
+      ctx.restore();
+    }
+  }
+  window.onload = function() {
+    setInterval(clockRender, 1000);
+  };
+
+  function stop() {
+    if (clockOn === true) {
+      clockOn = false;
+      } 
+      else {
+        clockOn = true;
+    }
+  }
+</script>
+
+<canvas id="canvas" height="500" width="500"></canvas>
+<input type="button" onclick="stop()" value="Start / Stop">
+</script>
+</body>
+</html>

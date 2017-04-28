@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+	<title>Vote</title>
+  <style>
+    #voteBox {
+      background: PowderBlue;
+      width: 25px;
+      height: 18px;
+      float: left;
+      border: solid 1px black;
+      text-align: center;
+    }
+    .button {
+      float: left;
+    }
+  </style>
+</head>
+<body>
+<input type="button" onclick="voteMinus()" class="button" value="-">
+<div id="voteBox"></div>
+<input type="button" onclick="votePlus()" class="button" value="+">
+
+<script>
+  var vote = '0';
+  var voteBox = document.getElementById('voteBox');
+  voteBox.innerHTML = vote;
+
+  function voteMinus() {
+    vote--;
+    voteBox.innerHTML = vote;
+  }
+
+  function votePlus() {
+    vote++;
+  voteBox.innerHTML = vote;
+  }
+</script>
+</body>
+</html>
