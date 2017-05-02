@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<title>valid</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<style>
+		.formInput {
+			margin: 4px;
+		}
+		#form {
+			max-width: 480px;
+		}
+	</style>
+</head>
+<body>
+    <h1>Ajax</h1>
+    <div id="form"> 
+    <form action="javascript:void(null);" method="POST" onsubmit="sendAjax()">
+        <fieldset>
+            <legend>Поля валидатора</legend>
+            <input type="text" class="formInput" id="username" placeholder="username"><br>
+            <input type="text" class="formInput" id="password" placeholder="password"><br>
+            <input type="text" class="formInput" id="email" placeholder="email"><br>
+            <input type="text" class="formInput" id="gender" placeholder="gender"><br>
+            <input type="text" class="formInput" id="credit_card" placeholder="credit_card"><br>
+            <input type="text" class="formInput" id="birth" placeholder="birth"><br> <!-- birth  2005-08-09-->
+           
+            <textarea name="textarea" class="formInput" id="bio" rows="10" cols="50" placeholder="bio"></textarea>
+            <br><br>
+            <input type="submit" value="Отправить"><br/>
+            <!-- <input type="button" onclick="sendAjax()" value="Отправить"> -->
+        </fieldset>
+    </form>
+
+    <div id="progressbar"></div>
+
+    <div id="answer"></div>
+
+    <div id="dialog" title="Basic dialog">
+  	<p></p>
+	</div>
+
+<script>
+//• Добавить индикатор заполненности формы с помощью виджета jQuery UI (Progressbar)
+//• Все возвращаемые ошибки выводить с помощью виджета Dialog
+//• Ошибочные поля подсветить с помощью какого-нибудь эффекта, например, Bounce.
+
+	var xhr;
+
+	if(window.XMLHttpRequest) {
+		xhr = new XMLHttpRequest();
+	} 
+	else {
+		xhr = new ActiveXObject('Microsoft.XMLHTTP');
+	}
+
+var formValue = document.getElementsByClassName('formInput'); // получаем псевдо массив
+var formValueArr = Array.prototype.slice.call(formValue); // преобразуем в массив
+
+var formData = formValueArr.map(function(intem) { // получаем годный массив
+return intem.id + '=' + intem.value;
+});
+
+function makeArr() {
+  formData = formValueArr.map(function(intem) { // получаем годный массив
+  return intem.id + '=' + intem.value;
+  });
+}
+
+var textForm = formData.join('&'); // делает текстовую строку по средствам join
+
+	xhr.onreadystatechange = function () {
+		if (xhr.readyState === xhr.DONE && xhr.status === 200) {
+
+			var response = JSON.parse(xhr.responseText);
+
+			if (response.result === true) { // та же проверка !response.result можно и сюда поместить
+				answer.innerHTML = "Succseed";
+			} else {
+				answer.innerHTML = "Ошибка! Проверьте правильность заполнения полей формы";
+			}
+			if(!response.result) {
+				response.error.forEach(function(item, key) {
+					var correctKey = key.toLowerCase().replace(' ', '_'); // нужет ли тут этот replace?
+
+					document.getElementById(correctKey).innerText = item; // ???
+
+					dialog.textContent = correctKey; // как то так?
+					$( "#dialog" ).dialog(); // вызываем окно dialog
+				});
+			}
+
+
+		}
+
+		if (xhr.status===0){
+			answer.innerHTML = "нет доступа к валидатору";
+		}
+	};
+
+
+
+	function sendAjax() { // sendAjax() - переименовываем функцию по образцу
+		xhr.open("POST", "http://localhost/js2/validator.php", true);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+		makeArr();
+		xhr.send(formData);
+		var progressCoin = 0;
+		for (i = 0; i < formValueArr.length; i++) {
+		if (formValueArr[i].value != "") {
+			progressCoin = progressCoin + 15;
+			if(progressCoin > 100) progressCoin = 100;
+			}
+		}
+		 $( "#progressbar" ).progressbar({
+      	value: progressCoin
+    	});
+	}
+
+	$( function() {  // progressbar функция заполняет прогрессбар
+    $( "#progressbar" ).progressbar({
+      value: 0
+    });
+  	} );
+
+  	$('#birth').datepicker({
+  		firstDay: 1,
+  		dayNamesMin: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
+  		monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+  		dateFormat: "dd.mm.yy"
+  	});
+
+  	/* вызывает окно dialig
+  	$( function() {
+    $( "#dialog" ).dialog();
+  	} );
+	*/
+</script>
+
+</body>
+</html>
